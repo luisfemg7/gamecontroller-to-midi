@@ -1,5 +1,6 @@
 extern crate sdl2;
 
+use sdl2::controller::Axis;
 use sdl2::controller::Button;
 use sdl2::event::Event;
 
@@ -9,7 +10,7 @@ pub fn main() -> Result<(), String> {
 
     let controller_subsystem = sdl_context.game_controller()?;
 
-    let mut game_controller = controller_subsystem.open(0).map_err(|e| format!("Failed to open controller: {}", e))?;
+    let _game_controller = controller_subsystem.open(0).map_err(|e| format!("Failed to open controller: {}", e))?;
     
     /*
     'running: loop {
@@ -76,6 +77,44 @@ pub fn main() -> Result<(), String> {
                         Button::Paddle3 => println!("Paddle3 button pressed up!"),
                         Button::Paddle4 => println!("Paddle4 button pressed up!"),
                         Button::Touchpad => println!("Touchpad button pressed up!"),
+                    }
+                },
+                Event::ControllerAxisMotion { axis, value, .. } => {
+                    match axis {
+                        Axis::RightX => {
+                            if value > 16384 {
+                                println!("Right joystick moved right");
+                            } else if value < -16384 {
+                                println!("Right joystick moved left");
+                            }
+                        },
+                        Axis::RightY => {
+                            if value > 16384 {
+                                println!("Right joystick moved down");
+                            } else if value < -16384 {
+                                println!("Right joystick moved up");
+                            }
+                        },
+                        Axis::LeftX => {
+                            if value > 16384 {
+                                println!("Left joystick moved right");
+                            } else if value < -16384 {
+                                println!("Left joystick moved left");
+                            }
+                        },
+                        Axis::LeftY => {
+                            if value > 16384 {
+                                println!("Left joystick moved down");
+                            } else if value < -16384 {
+                                println!("Left joystick moved up");
+                            }
+                        },
+                        Axis::TriggerRight => {
+                            println!("Right trigger value: {}", value);
+                        },
+                        Axis::TriggerLeft => {
+                            println!("Left trigger value: {}", value);
+                        },
                     }
                 },
                 _ => {}
